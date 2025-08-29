@@ -1,0 +1,129 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id            Int       @id @default(autoincrement())
+  email         String    @unique
+  username      String    @unique
+  fullName      String    @map("full_name")
+  hashedPassword String   @map("hashed_password")
+  isActive      Boolean   @default(true) @map("is_active")
+  isSuperuser   Boolean   @default(false) @map("is_superuser")
+  bio           String?
+  avatarUrl     String?   @map("avatar_url")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  // Relations
+  posts     Post[]
+  comments  Comment[]
+
+  @@map("users")
+}
+
+model Category {
+  id          Int       @id @default(autoincrement())
+  name        String    @unique
+  slug        String    @unique
+  description String?
+  color       String?   // Hex color code
+  icon        String?   // Icon name or class
+  isActive    Boolean   @default(true) @map("is_active")
+  postCount   Int       @default(0) @map("post_count")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  // Relations
+  posts Post[]
+
+  @@map("categories")
+}
+
+model Tag {
+  id          Int       @id @default(autoincrement())
+  name        String    @unique
+  slug        String    @unique
+  description String?
+  color       String?   // Hex color code
+  isActive    Boolean   @default(true) @map("is_active")
+  postCount   Int       @default(0) @map("post_count")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  // Relations
+  posts PostTag[]
+
+  @@map("tags")
+}
+
+model Post {
+  id            Int       @id @default(autoincrement())
+  title         String
+  content       String
+  slug          String    @unique
+  excerpt       String?
+  featuredImage String?   @map("featured_image")
+  isPublished   Boolean   @default(false) @map("is_published")
+  isFeatured    Boolean   @default(false) @map("is_featured")
+  viewCount     Int       @default(0) @map("view_count")
+  likeCount     Int       @default(0) @map("like_count")
+  authorId      Int       @map("author_id")
+  categoryId    Int?      @map("category_id")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+  publishedAt   DateTime? @map("published_at")
+
+  // Relations
+  author    User       @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  category  Category?  @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  comments  Comment[]
+  tags      PostTag[]
+
+  @@map("posts")
+}
+
+model Comment {
+  id            Int       @id @default(autoincrement())
+  content       String
+  isApproved    Boolean   @default(false) @map("is_approved")
+  isSpam        Boolean   @default(false) @map("is_spam")
+  likeCount     Int       @default(0) @map("like_count")
+  authorId      Int?      @map("author_id")
+  postId        Int       @map("post_id")
+  parentId      Int?      @map("parent_id")
+  authorEmail   String?   @map("author_email")
+  authorName    String?   @map("author_name")
+  authorWebsite String?   @map("author_website")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  // Relations
+  author   User?     @relation(fields: [authorId], references: [id], onDelete: SetNull)
+  post     Post      @relation(fields: [postId], references: [id], onDelete: Cascade)
+  parent   Comment?  @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  replies  Comment[] @relation("CommentReplies")
+
+  @@map("comments")
+}
+
+// Junction table for many-to-many relationship between Posts and Tags
+model PostTag {
+  postId Int @map("post_id")
+  tagId  Int @map("tag_id")
+
+  // Relations
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  tag  Tag  @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([postId, tagId])
+  @@map("post_tags")
+}
