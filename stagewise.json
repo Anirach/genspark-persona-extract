@@ -1,0 +1,23 @@
+{
+  "port": 3100,
+  "appPort": 8080,
+  "autoPlugins": true,
+  "workflowsDir": "./workflows",
+  "plugins": [],
+  "ui": {
+    "title": "Persona Extraction Pipeline",
+    "theme": "light",
+    "showTimestamps": true,
+    "autoRefresh": true
+  },
+  "integrations": {
+    "vite": {
+      "enabled": true,
+      "port": 8080
+    }
+  },
+  "monitoring": {
+    "enabled": true,
+    "logLevel": "info"
+  }
+}
