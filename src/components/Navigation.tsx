@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { BookOpen, Home, BarChart3, Users, Settings } from 'lucide-react';
+import { BookOpen, Home, BarChart3, Users, Settings, Wand2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
@@ -10,6 +10,7 @@ export const Navigation: React.FC = () => {
   const navItems = [
     { path: '/', label: 'Home', icon: Home },
     { path: '/blog', label: 'Blog', icon: BookOpen },
+    { path: '/ai-generation', label: 'AI Gen', icon: Wand2 },
     { path: '/stats', label: 'Stats', icon: BarChart3 },
     { path: '/reviewer-admin', label: 'Admin', icon: Users },
     { path: '/system-dashboard', label: 'System', icon: Settings },
@@ -30,7 +31,8 @@ export const Navigation: React.FC = () => {
             {navItems.map((item) => {
               const Icon = item.icon;
               const isActive = location.pathname === item.path || 
-                (item.path === '/blog' && location.pathname.startsWith('/blog'));
+                (item.path === '/blog' && location.pathname.startsWith('/blog')) ||
+                (item.path === '/ai-generation' && location.pathname.startsWith('/ai-generation'));
 
               return (
                 <Button

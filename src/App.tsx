@@ -12,6 +12,7 @@ import ReviewerAdmin from "./pages/ReviewerAdmin";
 import SystemDashboard from "./pages/SystemDashboard";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
+import AIGeneration from "./pages/AIGeneration";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -34,6 +35,7 @@ const App = () => (
         <Routes>
           <Route path="/blog" element={<Blog />} />
           <Route path="/blog/post/:id" element={<BlogPost />} />
+          <Route path="/ai-generation" element={<AIGeneration />} />
           <Route path="/personaextraction" element={<Dashboard />} />
           <Route path="/stats" element={<StatsVerification />} />
           <Route path="/reviewer-admin" element={<ReviewerAdmin />} />

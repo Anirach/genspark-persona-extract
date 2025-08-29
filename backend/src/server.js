@@ -20,6 +20,7 @@ import categoryRoutes from './routes/categories.js';
 import tagRoutes from './routes/tags.js';
 import commentRoutes from './routes/comments.js';
 import dashboardRoutes from './routes/dashboard.js';
+import aiRoutes from './routes/ai.js';
 
 const app = express();
 
@@ -76,6 +77,7 @@ app.use('/api/categories', categoryRoutes);
 app.use('/api/tags', tagRoutes);
 app.use('/api/comments', commentRoutes);
 app.use('/api/dashboard', dashboardRoutes);
+app.use('/api/ai', aiRoutes);
 
 // Root endpoint
 app.get('/', (req, res) => {
@@ -91,7 +93,8 @@ app.get('/', (req, res) => {
       categories: '/api/categories',
       tags: '/api/tags',
       comments: '/api/comments',
-      dashboard: '/api/dashboard'
+      dashboard: '/api/dashboard',
+      ai: '/api/ai'
     }
   });
 });
